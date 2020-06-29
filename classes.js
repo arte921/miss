@@ -16,16 +16,18 @@ class Blob {
 
 			this.move(-speed)
 
-			console.log(this.momentum, other.momentum)
+			console.log(this.momentum.sum(other.momentum, -1), (this.pos.sum(other.pos, -1)))
 
 			let thismomentum = this.momentum
+			let othermomentum = other.momentum
 
 			thismomentum.x = (this.momentum.x - 1) * this.momentum.sum(other.momentum, -1).dotProduct(this.pos.sum(other.pos, -1)) * (this.pos.sum(other.pos, -1)) / Math.pow(this.pos.sum(other.pos, -1).length, 2)
 			thismomentum.y = (this.momentum.y - 1) * this.momentum.sum(other.momentum, -1).dotProduct(this.pos.sum(other.pos, -1)) * (this.pos.sum(other.pos, -1)) / Math.pow(this.pos.sum(other.pos, -1).length, 2)
-			other.momentum.x = (other.momentum.x - 1) * other.momentum.sum(this.momentum, -1).dotProduct(other.pos.sum(this.pos, -1)) * (other.pos.sum(this.pos, -1)) / Math.pow(other.pos.sum(this.pos, -1).length, 2)
-			other.momentum.y = (other.momentum.y - 1) * other.momentum.sum(this.momentum, -1).dotProduct(other.pos.sum(this.pos, -1)) * (other.pos.sum(this.pos, -1)) / Math.pow(other.pos.sum(this.pos, -1).length, 2)
+			othermomentum.x = (other.momentum.x - 1) * other.momentum.sum(this.momentum, -1).dotProduct(other.pos.sum(this.pos, -1)) * (other.pos.sum(this.pos, -1)) / Math.pow(other.pos.sum(this.pos, -1).length, 2)
+			othermomentum.y = (other.momentum.y - 1) * other.momentum.sum(this.momentum, -1).dotProduct(other.pos.sum(this.pos, -1)) * (other.pos.sum(this.pos, -1)) / Math.pow(other.pos.sum(this.pos, -1).length, 2)
 
 			this.momentum = thismomentum
+			other.momentum = othermomentum
 		}
 	}
 
@@ -35,9 +37,14 @@ class Blob {
 }
 
 class Vector {
-	constructor (x, y) {
-		this.x = x
-		this.y = y
+	constructor (x, y, copy = false, cat) {
+		if (copy) {
+			this.x = cat.x
+			this.y = cat.y
+		} else {
+			this.x = x
+			this.y = y
+		}
 	}
 
 	length () {
@@ -60,8 +67,11 @@ class Vector {
 	}
 
 	dotProduct (other) {
-		//console.log(this.toAngle(),  other.toAngle())
+		console.log(this, other)
 		return this.length * other.length * Math.cos(this.toAngle() - other.toAngle())
 	}
 }
 
+function copyVector(cat){
+	return new Vector(null, null, true, cat)
+}
