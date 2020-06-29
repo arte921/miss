@@ -6,8 +6,8 @@ let blobs = []
 
 let blackhole = new Vector(50, 50)
 
-blobs.push(new Blob(new Vector(80, 50), new Vector(-10, 0), 3, blackhole))
-blobs.push(new Blob(new Vector(40, 43), new Vector(10, 0), 5, blackhole))
+blobs.push(new Blob(new Vector(80, 50), new Vector(-10, 1), 3, blackhole))
+blobs.push(new Blob(new Vector(40, 43), new Vector(10, 1), 5, blackhole))
 
 function tick(){
 
