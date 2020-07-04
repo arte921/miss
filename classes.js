@@ -6,28 +6,28 @@ class Blob {
 		this.momentum = momentum
 		this.radius = radius
 		this.attractor = attractor
+		this.colliding = null
 	}
 
-
-
-	tryColliding (other) {
+	setColliding (other) {
 		let distance = this.pos.distanceTo(other.pos)
-		if(distance < this.radius + other.radius){
+		if(distance < this.radius + other.radius && other.colliding == null && this.colliding == null){
+			this.colliding = other
+			other.colliding = this
+		}		
+	}
 
+	tryColliding(){
+		if(this.colliding !== null){
+			let other = this.colliding
+			
 			this.move(-speed)
 
-			console.log(this.momentum.sum(other.momentum, -1), (this.pos.sum(other.pos, -1)))
+			let angle = normalize(Math.atan((this.pos.y - other.pos.y) /  (this.pos.x - other.pos.x)) + Math.PI / 2)
+			let thisRelativeAngle = normalize(angle - this.momentum.toAngle())
+			this.momentum = this.momentum.rotate(thisRelativeAngle * -2)
 
-			let thismomentum = this.momentum
-			let othermomentum = other.momentum
-
-			thismomentum.x = (this.momentum.x - 1) * this.momentum.sum(other.momentum, -1).dotProduct(this.pos.sum(other.pos, -1)) * (this.pos.sum(other.pos, -1)) / Math.pow(this.pos.sum(other.pos, -1).length, 2)
-			thismomentum.y = (this.momentum.y - 1) * this.momentum.sum(other.momentum, -1).dotProduct(this.pos.sum(other.pos, -1)) * (this.pos.sum(other.pos, -1)) / Math.pow(this.pos.sum(other.pos, -1).length, 2)
-			othermomentum.x = (other.momentum.x - 1) * other.momentum.sum(this.momentum, -1).dotProduct(other.pos.sum(this.pos, -1)) * (other.pos.sum(this.pos, -1)) / Math.pow(other.pos.sum(this.pos, -1).length, 2)
-			othermomentum.y = (other.momentum.y - 1) * other.momentum.sum(this.momentum, -1).dotProduct(other.pos.sum(this.pos, -1)) * (other.pos.sum(this.pos, -1)) / Math.pow(other.pos.sum(this.pos, -1).length, 2)
-
-			this.momentum = thismomentum
-			other.momentum = othermomentum
+			this.colliding = null
 		}
 	}
 
@@ -37,14 +37,9 @@ class Blob {
 }
 
 class Vector {
-	constructor (x, y, copy = false, cat) {
-		if (copy) {
-			this.x = cat.x
-			this.y = cat.y
-		} else {
-			this.x = x
-			this.y = y
-		}
+	constructor (x, y) {
+		this.x = x
+		this.y = y
 	}
 
 	length () {
@@ -54,7 +49,6 @@ class Vector {
 	sum (other, multiplier = 1) {
 		//console.log(other, multiplier)
 		//always null?
-		//console.log(this.x, other.x, this.y, other.y, multiplier)
 		return new Vector(this.x + other.x * multiplier, this.y + other.y * multiplier)
 	}
 
@@ -70,8 +64,36 @@ class Vector {
 		console.log(this, other)
 		return this.length * other.length * Math.cos(this.toAngle() - other.toAngle())
 	}
+
+	unit () {
+		let length = this.length ()
+		return new Vector(this.x / length, this.y / length)
+	}
+
+	multiply (other) {
+		return new Vector(this.x * other.x, this.y * other.y)
+	}
+
+	rotate (angle) {
+		let l = this.length()
+		let currentAngle = this.toAngle()
+		let newAngle = currentAngle + angle
+		return this.withAngle (newAngle)
+	}
+
+	withAngle (angle) {
+		let l = this.length()
+		let t = Math.tan(angle) // y / x
+		let x = Math.sqrt(Math.pow(l, 2) / (1 + Math.pow(t, 2)))
+		let y = t * x
+		return new Vector(x, y)
+	}
+
+	setlength (magnitude) {
+
+	}
 }
 
-function copyVector(cat){
-	return new Vector(null, null, true, cat)
+function normalize(angle){
+	return (angle + Math.PI * 2) % Math.PI * 2
 }

@@ -1,7 +1,2 @@
-(speed * Math.cos(this.momentum.toAngle() - p) * ())
 
-
-
-			let speed = this.momentum.length
-			let p = this.momentum.toAngle() - other.momentum.toAngle()
-			this.momentum.x = 2 * other.momentum.length() * Math.cos()
+		// return this.multiply(new Vector(Math.cos(degrees) - Math.sin(degrees), Math.sin(degrees) + Math.cos(degrees)))
