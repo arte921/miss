@@ -17,13 +17,13 @@ function tick() {
         blob.move(speed)
         blobs.forEach(other => {
             if (other != blob) {
-                blob.setColliding(other)
+                blob.checkColliding(other)
             }
         })
     })
 
     blobs.forEach(blob => {
-        blob.tryColliding()
+        blob.collisionResponse()
         ctx.beginPath()
         ctx.arc(width / 100 * blob.pos.x, height / 100 * blob.pos.y, width / 100 * blob.radius, 0, 2 * Math.PI)
         ctx.fill()

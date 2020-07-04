@@ -9,7 +9,7 @@ class Blob {
 		this.colliding = null
 	}
 
-	setColliding (other) {
+	checkColliding (other) {
 		let distance = this.pos.distanceTo(other.pos)
 		if(distance < this.radius + other.radius && other.colliding == null && this.colliding == null){
 			this.colliding = other
@@ -17,15 +17,16 @@ class Blob {
 		}		
 	}
 
-	tryColliding(){
+	collisionResponse () {
 		if(this.colliding !== null){
 			let other = this.colliding
+			console.log(other)
 			
 			this.move(-speed)
 
-			let angle = normalize(Math.atan((this.pos.y - other.pos.y) /  (this.pos.x - other.pos.x)) + Math.PI / 2)
-			let thisRelativeAngle = normalize(angle - this.momentum.toAngle())
-			this.momentum = this.momentum.rotate(thisRelativeAngle * -2)
+			let angle = Math.atan((this.pos.y - other.pos.y) /  (this.pos.x - other.pos.x)) + Math.PI / 2
+			let thisRelativeAngle = angle - this.momentum.toAngle()
+			this.momentum = this.momentum.withAngle(angle + Math.PI + thisRelativeAngle)
 
 			this.colliding = null
 		}
@@ -74,6 +75,10 @@ class Vector {
 		return new Vector(this.x * other.x, this.y * other.y)
 	}
 
+	times (factor) {
+		return new Vector(this.x * factor, this.y * factor)
+	}
+
 	rotate (angle) {
 		let l = this.length()
 		let currentAngle = this.toAngle()
@@ -89,8 +94,14 @@ class Vector {
 		return new Vector(x, y)
 	}
 
-	setlength (magnitude) {
+	withLength (length) {
+		let l = this.length()
+		let normalized = this.normalized()
+		return new Vector(normalized.times(length))
+	}
 
+	normalized () {
+		return this.times(1 / this.length())
 	}
 }
 
