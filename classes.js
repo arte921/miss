@@ -1,4 +1,5 @@
 const speed = 0.1
+var lastTime = 0
 
 class Blob {
 	constructor (pos, momentum, radius, attractor, id) {
@@ -8,9 +9,9 @@ class Blob {
 		this.attractor = attractor
 		this.id = id
 		this.colliding = null
-		let r = Math.floor(Math.random() * 0)
-		let g = Math.floor(Math.random() * 0)
-		let b = Math.floor(Math.random() * 0)
+		let r = Math.floor(Math.random() * 100 + 156)
+		let g = Math.floor(Math.random() * 100 + 156)
+		let b = Math.floor(Math.random() * 100 + 156)
 		this.color = `rgb(${r}, ${g}, ${b})`
 
 	}
@@ -22,18 +23,12 @@ class Blob {
 			//other.colliding = this
 			this.pos = new Vector(Math.random() * 100, Math.random() * 100)
 			this.momentum = this.momentum.times(0.5)
-
-			let bcolor = this.color
-			this.color = other.color
-			other.color = bcolor
-
-			if (this.color = "rgb(255, 0, 0)") {
-				console.log(this.id)
-			}
+			
+			lastTime = performance.now()
 		}		
 	}
 
-	collisionResponse () {
+	collisionResponse () { // WIP
 		if(this.colliding != null){
 			let other = this.colliding
 			

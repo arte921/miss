@@ -15,7 +15,8 @@ blobs[0].color = "rgb(255, 0, 0)"
 // blobs[0].radius = 1
 
 function tick() {
-    ctx.clearRect(0, 0, width, height)
+    ctx.fillStyle = '#000000'
+    ctx.fillRect(0, 0, width, height)
     blobs.forEach(blob => {
         blob.move(speed)
         // blob.moveAbs(1)
@@ -35,6 +36,7 @@ function tick() {
         ctx.fill()
     })
 
+    document.getElementById("time").innerText = `Time since last collision: ${Math.round(performance.now() - lastTime)} ms`
     window.requestAnimationFrame(tick)
 }
 
