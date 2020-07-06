@@ -57,7 +57,7 @@ class Vector {
 	}
 
 	length () {
-		return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2))
+		return Math.sqrt(this.x ** 2 + this.y ** 2)
 	}
 
 	sum (other, multiplier = 1) {
@@ -65,7 +65,7 @@ class Vector {
 	}
 
 	distanceTo (point) {
-		return Math.sqrt(Math.pow(point.x - this.x, 2) + Math.pow(point.y - this.y, 2))
+		return Math.sqrt((point.x - this.x) ** 2 + (point.y - this.y) ** 2)
 	}
 
 	toAngle () {
@@ -102,7 +102,7 @@ class Vector {
 		let angle = normalizeAngle(rawangle)
 		let l = this.length()
 		let t = Math.tan(angle) // y / x
-		let x = Math.sqrt(Math.pow(l, 2) / (1 + Math.pow(t, 2)))
+		let x = Math.sqrt(l ** 2 / (1 + t ** 2))
 		let y = t * x
 		return new Vector(-x, -y)
 	}
