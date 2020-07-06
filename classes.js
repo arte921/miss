@@ -36,7 +36,8 @@ class Blob {
 
 	applyGravity () {
 		let diff = this.attractor.sum(this.pos, -1)
-		this.momentum = this.momentum.sum(diff.times(1 / 50))
+		let dist = diff.length()
+		this.momentum = this.momentum.sum(diff.withLength(dist / 200))
 	}
 
 	move (multiplier = speed) {
