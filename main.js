@@ -9,14 +9,15 @@ let blackhole = new Vector(50, 50)
 //blobs.push(new Blob(new Vector(80, 57), new Vector(Math.random() * -10, Math.random() * 0.1), 3, blackhole))
 
 
-for (let i=0; i < 10; i++){
-    blobs.push(new Blob(new Vector(Math.random() * 100, Math.random() * 100), new Vector(Math.random() * 10 - 5, Math.random() * 10 - 5), Math.random() * 2, blackhole))
+for (let i=0; i < 30; i++){
+    blobs.push(new Blob(new Vector(Math.random() * 100, Math.random() * 100), new Vector(Math.random() * 10 - 5, Math.random() * 10 - 5), Math.random() * 1, blackhole))
 }
 
 function tick() {
     ctx.clearRect(0, 0, width, height)
     blobs.forEach(blob => {
         blob.move(speed)
+        // blob.moveAbs(1)
         blobs.forEach(other => {
             if (other != blob) {
                 blob.checkColliding(other)

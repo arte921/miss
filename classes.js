@@ -12,8 +12,11 @@ class Blob {
 	checkColliding (other) {
 		let distance = this.pos.distanceTo(other.pos)
 		if(distance < this.radius + other.radius && other.colliding == null && this.colliding == null){
-			this.colliding = other
-			other.colliding = this
+			//this.colliding = other
+			//other.colliding = this
+			this.pos = new Vector(Math.random() * 100, Math.random() * 100)
+			this.momentum = this.momentum.times(0.5)
+			console.log("collided", Math.random())
 		}		
 	}
 
@@ -21,7 +24,7 @@ class Blob {
 		if(this.colliding != null){
 			let other = this.colliding
 			
-			this.moveAbs(this.pos.distanceTo(other.pos))
+			this.moveAbs(-1 * (this.pos.distanceTo(other.pos) - this.radius - other.radius + 1))
 
 			let angle = Math.atan((this.pos.y - other.pos.y) / (this.pos.x - other.pos.x)) + Math.PI / 2
 			let thisRelativeAngle = angle - (this.momentum.toAngle() - Math.PI / 2)
@@ -33,16 +36,16 @@ class Blob {
 
 	applyGravity () {
 		let diff = this.attractor.sum(this.pos, -1)
-		this.momentum = this.momentum.sum(diff.times(1 / 100))
+		this.momentum = this.momentum.sum(diff.times(1 / 50))
 	}
 
 	move (multiplier = speed) {
-		console.log(this)
+		// console.log(this)
 		this.pos = this.pos.sum(this.momentum, multiplier)
 	}
 
 	moveAbs (dist) {
-		this.pos = this.pos.sum(this.momentum.normalized().times(dist))
+		this.pos = this.pos.sum(this.momentum.normalized(), dist)
 	}
 }
 
@@ -100,15 +103,7 @@ class Vector {
 		let t = Math.tan(angle) // y / x
 		let x = Math.sqrt(Math.pow(l, 2) / (1 + Math.pow(t, 2)))
 		let y = t * x
-		let candidate = new Vector(x, y)
-		let candidateangle = normalizeAngle(candidate.toAngle())
-		if(candidateangle == angle){
-			console.log("==")
-			return candidate
-		} else {
-			console.log("else")
-			return candidate.times(-1)
-		}
+		return new Vector(-x, -y)
 	}
 
 	withLength (length) {
