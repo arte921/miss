@@ -1,12 +1,18 @@
 const speed = 0.1
 
 class Blob {
-	constructor (pos, momentum, radius, attractor) {
+	constructor (pos, momentum, radius, attractor, id) {
 		this.pos = pos
 		this.momentum = momentum
 		this.radius = radius
 		this.attractor = attractor
+		this.id = id
 		this.colliding = null
+		let r = Math.floor(Math.random() * 0)
+		let g = Math.floor(Math.random() * 0)
+		let b = Math.floor(Math.random() * 0)
+		this.color = `rgb(${r}, ${g}, ${b})`
+
 	}
 
 	checkColliding (other) {
@@ -16,7 +22,14 @@ class Blob {
 			//other.colliding = this
 			this.pos = new Vector(Math.random() * 100, Math.random() * 100)
 			this.momentum = this.momentum.times(0.5)
-			console.log("collided", Math.random())
+
+			let bcolor = this.color
+			this.color = other.color
+			other.color = bcolor
+
+			if (this.color = "rgb(255, 0, 0)") {
+				console.log(this.id)
+			}
 		}		
 	}
 
@@ -56,38 +69,25 @@ class Vector {
 		this.y = y
 	}
 
-	length () {
-		return Math.sqrt(this.x ** 2 + this.y ** 2)
-	}
+	length = () => Math.sqrt(this.x ** 2 + this.y ** 2)
 
-	sum (other, multiplier = 1) {
-		return new Vector(this.x + other.x * multiplier, this.y + other.y * multiplier)
-	}
+	sum = (other, multiplier = 1) => new Vector(this.x + other.x * multiplier, this.y + other.y * multiplier)
+	
+	distanceTo = (point) => Math.sqrt((point.x - this.x) ** 2 + (point.y - this.y) ** 2)
 
-	distanceTo (point) {
-		return Math.sqrt((point.x - this.x) ** 2 + (point.y - this.y) ** 2)
-	}
+	toAngle = () => Math.tan(this.y / this.x)
 
-	toAngle () {
-		return Math.tan(this.y / this.x)
-	}
+	dotProduct = (other) => this.length * other.length * Math.cos(this.toAngle() - other.toAngle())
 
-	dotProduct (other) {
-		// console.log(this, other)
-		return this.length * other.length * Math.cos(this.toAngle() - other.toAngle())
-	}
+	multiply = (other) => new Vector(this.x * other.x, this.y * other.y)
+
+	times = (factor) => new Vector(this.x * factor, this.y * factor)
+
+	normalized = () => this.times(1 / this.length())
 
 	unit () {
 		let length = this.length ()
 		return new Vector(this.x / length, this.y / length)
-	}
-
-	multiply (other) {
-		return new Vector(this.x * other.x, this.y * other.y)
-	}
-
-	times (factor) {
-		return new Vector(this.x * factor, this.y * factor)
 	}
 
 	rotate (angle) {
@@ -111,12 +111,6 @@ class Vector {
 		let l = this.length()
 		return this.normalized().times(length)
 	}
-
-	normalized () {
-		return this.times(1 / this.length())
-	}
 }
 
-function normalizeAngle(angle){
-	return (angle + Math.PI * 2) % Math.PI * 2
-}
+let normalizeAngle = (angle) => (angle + Math.PI * 2) % Math.PI * 2
