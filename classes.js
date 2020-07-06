@@ -18,22 +18,31 @@ class Blob {
 	}
 
 	collisionResponse () {
-		if(this.colliding !== null){
+		if(this.colliding != null){
 			let other = this.colliding
-			console.log(other)
 			
-			this.move(-speed)
+			this.moveAbs(this.pos.distanceTo(other.pos))
 
-			let angle = Math.atan((this.pos.y - other.pos.y) /  (this.pos.x - other.pos.x)) + Math.PI / 2
-			let thisRelativeAngle = angle - this.momentum.toAngle()
-			this.momentum = this.momentum.withAngle(angle + Math.PI + thisRelativeAngle)
+			let angle = Math.atan((this.pos.y - other.pos.y) / (this.pos.x - other.pos.x)) + Math.PI / 2
+			let thisRelativeAngle = angle - (this.momentum.toAngle() - Math.PI / 2)
+			this.momentum = other.momentum.withAngle(angle + Math.PI + thisRelativeAngle).withLength(other.momentum.length())
 
 			this.colliding = null
 		}
 	}
 
+	applyGravity () {
+		let diff = this.attractor.sum(this.pos, -1)
+		this.momentum = this.momentum.sum(diff.times(1 / 100))
+	}
+
 	move (multiplier = speed) {
+		console.log(this)
 		this.pos = this.pos.sum(this.momentum, multiplier)
+	}
+
+	moveAbs (dist) {
+		this.pos = this.pos.sum(this.momentum.normalized().times(dist))
 	}
 }
 
@@ -48,8 +57,6 @@ class Vector {
 	}
 
 	sum (other, multiplier = 1) {
-		//console.log(other, multiplier)
-		//always null?
 		return new Vector(this.x + other.x * multiplier, this.y + other.y * multiplier)
 	}
 
@@ -62,7 +69,7 @@ class Vector {
 	}
 
 	dotProduct (other) {
-		console.log(this, other)
+		// console.log(this, other)
 		return this.length * other.length * Math.cos(this.toAngle() - other.toAngle())
 	}
 
@@ -86,18 +93,27 @@ class Vector {
 		return this.withAngle (newAngle)
 	}
 
-	withAngle (angle) {
+	withAngle (rawangle) {
+		// console.log(this, angle)
+		let angle = normalizeAngle(rawangle)
 		let l = this.length()
 		let t = Math.tan(angle) // y / x
 		let x = Math.sqrt(Math.pow(l, 2) / (1 + Math.pow(t, 2)))
 		let y = t * x
-		return new Vector(x, y)
+		let candidate = new Vector(x, y)
+		let candidateangle = normalizeAngle(candidate.toAngle())
+		if(candidateangle == angle){
+			console.log("==")
+			return candidate
+		} else {
+			console.log("else")
+			return candidate.times(-1)
+		}
 	}
 
 	withLength (length) {
 		let l = this.length()
-		let normalized = this.normalized()
-		return new Vector(normalized.times(length))
+		return this.normalized().times(length)
 	}
 
 	normalized () {
@@ -105,6 +121,6 @@ class Vector {
 	}
 }
 
-function normalize(angle){
+function normalizeAngle(angle){
 	return (angle + Math.PI * 2) % Math.PI * 2
 }
