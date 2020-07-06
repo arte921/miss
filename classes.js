@@ -53,14 +53,9 @@ class Blob {
 		this.momentum = this.momentum.sum(diff.withLength(dist / 200))
 	}
 
-	move (multiplier = speed) {
-		// console.log(this)
-		this.pos = this.pos.sum(this.momentum, multiplier)
-	}
+	move = (multiplier = speed) => this.pos = this.pos.sum(this.momentum, multiplier)
 
-	moveAbs (dist) {
-		this.pos = this.pos.sum(this.momentum.normalized(), dist)
-	}
+	moveAbs = (dist) => this.pos = this.pos.sum(this.momentum.normalized(), dist)
 }
 
 class Vector {
