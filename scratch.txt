@@ -1,2 +1,11 @@
 
-		// return this.multiply(new Vector(Math.cos(degrees) - Math.sin(degrees), Math.sin(degrees) + Math.cos(degrees)))
+let xtoc = (x) => (x - vxb) / vxd * width
+let ytoc = (y) => (y - vyb) / vyd * height
+
+let vxb = 0
+let vxe = canva
+let vyb = 0
+let vye = 100
+
+let vxd = vxe - vxb
+let vyd = vye = vyb

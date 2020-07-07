@@ -24,10 +24,10 @@ class Blob {
 
 	checkColliding (other) {
 		let distance = this.pos.distanceTo(other.pos)
-		if(distance < this.radius + other.radius && other.colliding == null && this.colliding == null){
+		if (distance < this.radius + other.radius && other.colliding == null && this.colliding == null) {
 			//this.colliding = other
 			//other.colliding = this
-			this.pos = new Vector(Math.random() * 100, Math.random() * 100)
+			this.pos = new Vector(Math.random() * width, Math.random() * height)
 			this.momentum = this.momentum.times(0.5)
 			
 			lastTime = performance.now()
@@ -35,7 +35,7 @@ class Blob {
 	}
 
 	collisionResponse () { // WIP
-		if(this.colliding != null){
+		if (this.colliding != null) {
 			let other = this.colliding
 			
 			this.moveAbs(-1 * (this.pos.distanceTo(other.pos) - this.radius - other.radius + 1))
@@ -93,9 +93,7 @@ class Vector {
 		return this.withAngle (newAngle)
 	}
 
-	withAngle (rawangle) {
-		// console.log(this, angle)
-		let angle = normalizeAngle(rawangle)
+	withAngle (angle) {
 		let l = this.length()
 		let t = Math.tan(angle) // y / x
 		let x = Math.sqrt(l ** 2 / (1 + t ** 2))

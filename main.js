@@ -1,22 +1,19 @@
+var title = document.getElementById("title")
 var canvas = document.getElementById("canvas")
 var ctx = canvas.getContext("2d")
-const width = canvas.width
-const height = canvas.height
+const width = window.innerWidth
+const height = window.innerHeight
+canvas.width = width
+canvas.height = height
 let blobs = []
 
-let blackhole = new Vector(50, 50)
+let blackhole = new Vector(width / 2, height / 2)
 
-//blobs.push(new Blob(new Vector(80, 57), new Vector(Math.random() * -10, Math.random() * 0.1), 3, blackhole))
-
-// for console usage
-function addBlob (x = Math.random() * 100, y = Math.random() * 100, color, r = 0.3, id = blobs.length + 1) {
+function addBlob (x = Math.random() * width, y = Math.random() * height, color, r = 4, id = blobs.length + 1) {
     blobs.push(new Blob(new Vector(x, y), new Vector(Math.random() * 10 - 5, Math.random() * 10 - 5), r, blackhole, id, color))
 }
 
-for (let i=0; i < 30; i++) blobs.push(new Blob(new Vector(Math.random() * 100, Math.random() * 100), new Vector(Math.random() * 10 - 5, Math.random() * 10 - 5), 0.3, blackhole, i))
-
-blobs[0].color = "rgb(255, 0, 0)"
-// blobs[0].radius = 1
+for (let i=0; i < 30; i++) addBlob()
 
 function tick() {
     ctx.fillStyle = '#000000'
@@ -36,11 +33,11 @@ function tick() {
         blob.applyGravity()
         ctx.fillStyle = blob.color
         ctx.beginPath()
-        ctx.arc(width / 100 * blob.pos.x, height / 100 * blob.pos.y, width / 100 * blob.radius, 0, 2 * Math.PI)
+        ctx.arc(blob.pos.x, blob.pos.y, blob.radius, 0, 2 * Math.PI)
         ctx.fill()
     })
 
-    document.getElementById("time").innerText = `Time since last collision: ${Math.round(performance.now() - lastTime)} ms`
+    document.getElementById("title").innerText = Math.round(performance.now() - lastTime) + " ms since collision"
     window.requestAnimationFrame(tick)
 }
 
