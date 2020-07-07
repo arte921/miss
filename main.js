@@ -13,7 +13,7 @@ function addBlob (x = Math.random() * width, y = Math.random() * height, color, 
     blobs.push(new Blob(new Vector(x, y), new Vector(Math.random() * 10 - 5, Math.random() * 10 - 5), r, blackhole, id, color))
 }
 
-for (let i=0; i < 30; i++) addBlob()
+for (let i=0; i < 50; i++) addBlob()
 
 function tick() {
     ctx.fillStyle = '#000000'

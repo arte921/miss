@@ -1,5 +1,5 @@
 var speed = 0.1
-var gravityStrength = 1 / 200
+var gravity = 1 / 200
 
 var lastTime = 0
 
@@ -51,7 +51,7 @@ class Blob {
 	applyGravity () {
 		let diff = this.attractor.sum(this.pos, -1)
 		let dist = diff.length()
-		this.momentum = this.momentum.sum(diff.withLength(dist * gravityStrength))
+		this.momentum = this.momentum.sum(diff.withLength(dist * gravity))
 	}
 
 	move = (multiplier = speed) => this.pos = this.pos.sum(this.momentum, multiplier)
