@@ -4,18 +4,22 @@ var gravityStrength = 1 / 200
 var lastTime = 0
 
 class Blob {
-	constructor (pos, momentum, radius, attractor, id) {
+	constructor (pos, momentum, radius, attractor, id, color) {
 		this.pos = pos
 		this.momentum = momentum
 		this.radius = radius
 		this.attractor = attractor
 		this.id = id
 		this.colliding = null
-		let r = Math.floor(Math.random() * 100 + 156)
-		let g = Math.floor(Math.random() * 100 + 156)
-		let b = Math.floor(Math.random() * 100 + 156)
-		this.color = `rgb(${r}, ${g}, ${b})`
 
+		if (color == null) {
+			let r = Math.floor(Math.random() * 100 + 156)
+			let g = Math.floor(Math.random() * 100 + 156)
+			let b = Math.floor(Math.random() * 100 + 156)
+			this.color = `rgb(${r}, ${g}, ${b})`
+		} else {
+			this.color = color
+		}
 	}
 
 	checkColliding (other) {

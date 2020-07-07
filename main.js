@@ -8,6 +8,10 @@ let blackhole = new Vector(50, 50)
 
 //blobs.push(new Blob(new Vector(80, 57), new Vector(Math.random() * -10, Math.random() * 0.1), 3, blackhole))
 
+// for console usage
+function addBlob (x = Math.random() * 100, y = Math.random() * 100, color, r = 0.3, id = blobs.length + 1) {
+    blobs.push(new Blob(new Vector(x, y), new Vector(Math.random() * 10 - 5, Math.random() * 10 - 5), r, blackhole, id, color))
+}
 
 for (let i=0; i < 30; i++) blobs.push(new Blob(new Vector(Math.random() * 100, Math.random() * 100), new Vector(Math.random() * 10 - 5, Math.random() * 10 - 5), 0.3, blackhole, i))
 
